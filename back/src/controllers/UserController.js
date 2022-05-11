@@ -30,11 +30,11 @@ class UserController {
   };
 
   static readByEmail = (req, res, next) => {
-    console.debug(req.body);
+    // console.debug(req.body);
     models.user
       .findByEmail(req.body.email)
       .then(([rows]) => {
-        console.debug(rows);
+        // console.debug(rows);
         if (!rows.length) {
           next();
         } else {
