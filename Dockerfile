@@ -1,3 +1,17 @@
+# build environment to build front app
+FROM node:16.15.0 as builder
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+ARG GENERATE_SOURCEMAP=${GENERATE_SOURCEMAP}
+ENV GENERATE_SOURCEMAP=${GENERATE_SOURCEMAP}
+ARG VITE_API_BASE_URL=${VITE_API_BASE_URL}
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+COPY ./front /usr/src/app
+RUN npm install
+RUN npm run build
+
+# production environment
 FROM node:16
 # Create app directory
 RUN mkdir /usr/src/app
@@ -24,9 +38,15 @@ ARG ACCESS_JWT_COOKIE_MAXAGE=${ACCESS_JWT_COOKIE_MAXAGE}
 ENV ACCESS_JWT_COOKIE_MAXAGE=${ACCESS_JWT_COOKIE_MAXAGE}
 ARG ACCESS_JWT_COOKIE_SECURE=${ACCESS_JWT_COOKIE_SECURE}
 ENV ACCESS_JWT_COOKIE_SECURE=${ACCESS_JWT_COOKIE_SECURE}
-COPY . /usr/src/app
+
+# Create back app
+COPY ./back /usr/src/app
 RUN npm install -g pnpm
 RUN pnpm i
-RUN node migrate.js
+
+# copy front app builded in public folder
+COPY --from=builder /usr/src/app/dist /usr/src/app/public/front
+
+# expose full app on APP_PORT
 EXPOSE ${APP_PORT}
 CMD ["node", "index.js"]
