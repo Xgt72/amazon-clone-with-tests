@@ -1,13 +1,13 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import "./Register.scss";
-import { useAuthContext } from "@contexts/AuthProvider";
+import useAuth from "@hooks/useAuth";
 import axios from "@api/axios";
 import { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 const LOGIN_URL = "/login";
 
 export default function Login() {
-  const { setAuth } = useAuthContext();
+  const { setAuth } = useAuth();
 
   const emailRef = useRef();
   const errRef = useRef();
@@ -65,7 +65,7 @@ export default function Login() {
       <h1>You are logged in!</h1>
       <br />
       <p>
-        <a href="#">Got to Home</a>
+        <Link to="/">Got to Home</Link>
       </p>
     </section>
   ) : (
@@ -106,7 +106,7 @@ export default function Login() {
           Need an Account?
           <br />
           <span className="line">
-            <a href="#">Sign Up</a>
+            <Link to="/register">Sign Up</Link>
           </span>
         </p>
       </form>

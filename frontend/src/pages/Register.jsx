@@ -7,8 +7,7 @@ import {
   faInfoCircle,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-
-import "./Register.scss";
+import { Link } from "react-router-dom";
 
 const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{3,23}$/;
 const EMAIL_REGEX = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/;
@@ -267,7 +266,7 @@ export default function Register() {
         <br />
         <span className="line">
           {/* pour router link here */}
-          <a href="#">Sign In</a>
+          <Link to="/login">Sign In</Link>
         </span>
       </p>
     </section>
