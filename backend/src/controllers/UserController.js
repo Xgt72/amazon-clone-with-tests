@@ -102,6 +102,32 @@ class UserController {
         res.sendStatus(500);
       });
   };
+
+  static checkEmailAndPassword = async (req, res, next) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) return res.sendStatus(400);
+
+    try {
+      const [[user]] = await models.user.findByEmail(email);
+
+      if (!user) return res.sendStatus(401);
+
+      const passwordIsValid = await models.user.isValidPassword(
+        user.hashedPassword,
+        password
+      );
+
+      if (!passwordIsValid) return res.sendStatus(401);
+
+      delete user.hashedPassword;
+      req.user = user;
+      return next();
+    } catch (err) {
+      console.error(err);
+      return res.sendStatus(500);
+    }
+  };
 }
 
 module.exports = UserController;
