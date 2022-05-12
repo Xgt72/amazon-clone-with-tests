@@ -45,7 +45,7 @@ RUN npm install -g pnpm
 RUN pnpm i
 
 # copy front app builded in public folder
-COPY --from=builder /usr/src/app/dist /usr/src/app/public
+COPY --from=builder /usr/src/app/dist /usr/src/app/public/front
 
 # expose full app on APP_PORT
 EXPOSE ${APP_PORT}
