@@ -1,0 +1,21 @@
+{
+  "name": "axios-user-registration-login",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "setup": "pnpm i && husky install && pnpm --prefix ./frontend i && pnpm --prefix ./backend i",
+    "dev": "concurrently -n front,back -c green,yellow -t \"HH:mm:ss\" -p \"{name} {time}\" \"pnpm --prefix ./frontend run dev\" \"pnpm --prefix ./backend run dev\"",
+    "dev-front": "pnpm --prefix ./frontend run dev",
+    "dev-back": "pnpm --prefix ./backend run dev",
+    "lint": "pnpm --prefix ./frontend run lint && pnpm --prefix ./backend run lint",
+    "fix": "pnpm --prefix ./frontend run fix && pnpm --prefix ./backend run fix"
+  },
+  "keywords": [],
+  "author": "Wild Code School",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^7.0.0",
+    "husky": "^7.0.0"
+  }
+}

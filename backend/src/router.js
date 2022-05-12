@@ -1,6 +1,7 @@
 const express = require("express");
 
 const { UserController } = require("./controllers");
+const JwtController = require("./helpers/JwtController");
 
 const router = express.Router();
 
@@ -11,5 +12,10 @@ router.put("/users/:id", UserController.edit);
 router.delete("/users/:id", UserController.delete);
 
 router.post("/register", UserController.readByEmail, UserController.add);
+router.post(
+  "/login",
+  UserController.checkEmailAndPassword,
+  JwtController.createAccessToken
+);
 
 module.exports = router;

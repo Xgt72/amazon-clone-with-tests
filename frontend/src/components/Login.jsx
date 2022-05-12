@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import "./Register.scss";
-import { useRef, useState, useEffect } from "react";
 import { useAuthContext } from "@contexts/AuthProvider";
 import axios from "@api/axios";
+import { useRef, useState, useEffect } from "react";
 
 const LOGIN_URL = "/login";
 
@@ -78,27 +79,29 @@ export default function Login() {
       </p>
       <h1>Sign In</h1>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          ref={emailRef}
-          autoComplete="off"
-          onChange={(e) => setEmail(e.target.value)}
-          value={email}
-          required
-        />
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          onChange={(e) => setPwd(e.target.value)}
-          value={pwd}
-          required
-        />
-        <button type="submit" disabled={!email || !pwd}>
-          Sign In
-        </button>
+        <label htmlFor="email">
+          Email:
+          <input
+            type="email"
+            id="email"
+            ref={emailRef}
+            autoComplete="off"
+            onChange={(e) => setEmail(e.target.value)}
+            value={email}
+            required
+          />
+        </label>
+        <label htmlFor="password">
+          Password:
+          <input
+            type="password"
+            id="password"
+            onChange={(e) => setPwd(e.target.value)}
+            value={pwd}
+            required
+          />
+        </label>
+        <button type="submit">Sign In</button>
         <p>
           Need an Account?
           <br />
