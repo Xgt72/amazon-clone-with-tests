@@ -1,13 +1,17 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import useAuth from "@hooks/useAuth";
-import axios from "@api/axios";
 import { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import useAuth from "@hooks/useAuth";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
+import axios from "@api/axios";
 const LOGIN_URL = "/login";
 
 export default function Login() {
   const { setAuth } = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const emailRef = useRef();
   const errRef = useRef();
@@ -15,7 +19,6 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     emailRef.current.focus();
@@ -40,12 +43,13 @@ export default function Login() {
         }
       );
       console.debug(response?.data);
-      const accessToken = response?.data?.accessToken;
+      const expiresIn = response?.data?.expiresIn;
       const roles = response?.data?.roles;
-      setAuth({ email, pwd, roles, accessToken });
+      setAuth({ user: { email, roles, expiresIn } });
       setEmail("");
       setPwd("");
-      setSuccess(true);
+      console.debug(from);
+      navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {
         setErrMsg("No Server Response");
@@ -60,15 +64,7 @@ export default function Login() {
     }
   };
 
-  return success ? (
-    <section>
-      <h1>You are logged in!</h1>
-      <br />
-      <p>
-        <Link to="/">Got to Home</Link>
-      </p>
-    </section>
-  ) : (
+  return (
     <section>
       <p
         ref={errRef}

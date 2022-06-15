@@ -1,5 +1,4 @@
 import "./App.scss";
-import { Routes, Route } from "react-router-dom";
 import Layout from "@pages/Layout";
 import Login from "@pages/Login";
 import Register from "@pages/Register";
@@ -10,6 +9,14 @@ import Editor from "@pages/Editor";
 import Admin from "@pages/Admin";
 import Lounge from "@pages/Lounge";
 import Missing from "@pages/Missing";
+import RequireAuth from "@components/RequireAuth";
+import { Routes, Route } from "react-router-dom";
+
+const ROLES = {
+  User: 2001,
+  Editor: 1984,
+  Admin: 5150,
+};
 
 export default function App() {
   return (
@@ -22,11 +29,20 @@ export default function App() {
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* we want to protect these routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="editor" element={<Editor />} />
-        <Route path="admin" element={<Admin />} />
-        <Route path="lounge" element={<Lounge />} />
-
+        <Route element={<RequireAuth allowedRoles={[ROLES.User]} />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+        <Route element={<RequireAuth allowedRoles={[ROLES.Editor]} />}>
+          <Route path="editor" element={<Editor />} />
+        </Route>
+        <Route element={<RequireAuth allowedRoles={[ROLES.Admin]} />}>
+          <Route path="admin" element={<Admin />} />
+        </Route>
+        <Route
+          element={<RequireAuth allowedRoles={[ROLES.Editor, ROLES.Admin]} />}
+        >
+          <Route path="lounge" element={<Lounge />} />
+        </Route>
         {/* catch all */}
         <Route path="*" element={<Missing />} />
       </Route>

@@ -47,6 +47,40 @@ class UserController {
       });
   };
 
+  static readWithRoles = async (req, res, next) => {
+    const { id } = req.params.id || req.user;
+    try {
+      const [results] = await models.user.findOneWithRoles(id);
+
+      if (!results.length) {
+        return res.status(404).send("User not found");
+      }
+
+      const user = {
+        id: results[0].id,
+        username: results[0].username,
+        email: results[0].email,
+        roles: results.map((role) => ({
+          id: role.roleId,
+          title: role.title,
+          code: role.code,
+        })),
+      };
+
+      if (
+        req.params.id ||
+        (req.method === "POST" && req.route.path === "/register")
+      ) {
+        return res.status(200).json(user);
+      }
+
+      req.user = user;
+      return next();
+    } catch (err) {
+      return res.status(500).send(err.message);
+    }
+  };
+
   static edit = (req, res) => {
     const user = req.body;
 
@@ -69,7 +103,7 @@ class UserController {
       });
   };
 
-  static add = async (req, res) => {
+  static add = async (req, res, next) => {
     const user = req.body;
 
     // TODO validations (length, format...)
@@ -80,14 +114,15 @@ class UserController {
       user.hashedPassword = hashedPassword;
 
       const [result] = await models.user.insert(user);
-      res.status(201).send({
-        username: user.username,
-        email: user.email,
-        id: result.insertId,
-      });
+      const [[userCreated]] = await models.user.find(result.insertId);
+
+      delete userCreated.hashedPassword;
+      req.user = userCreated;
+
+      return next();
     } catch (err) {
       console.error(err);
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   };
 

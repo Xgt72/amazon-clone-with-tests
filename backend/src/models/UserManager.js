@@ -38,6 +38,19 @@ class UserManager extends AbstractManager {
   isValidPassword(hashedPassword, password) {
     return argon2.verify(hashedPassword, password);
   }
+
+  // findAllWithRoles() {
+  //   return this.connection.query(
+  //     `SELECT u.id, u.username, u. email, r.id roleId, r.title, r.code FROM ${this.table} JOIN user_role ur ON u.id=ur.userId JOIN role r ON r.id=ur.roleId ORDER BY u.id`
+  //   );
+  // }
+
+  findOneWithRoles(id) {
+    return this.connection.query(
+      `SELECT u.id, u.username, u.email, r.id roleId, r.title, r.code FROM ${this.table} u JOIN user_role ur ON u.id=ur.userId JOIN role r ON r.id=ur.roleId WHERE u.id=?`,
+      [id]
+    );
+  }
 }
 
 module.exports = UserManager;

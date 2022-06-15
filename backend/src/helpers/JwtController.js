@@ -11,7 +11,7 @@ class JwtController {
   static createAccessToken = async (req, res) => {
     const { user } = req;
     const token = jwt.sign(
-      { UserInfo: { username: user.username, roles: undefined } },
+      { UserInfo: { username: user.username, roles: user.roles } },
       ACCESS_JWT_SECRET,
       {
         expiresIn: ACCESS_JWT_EXPIRESIN,
@@ -27,7 +27,7 @@ class JwtController {
         sameSite: "lax",
       })
       .json({
-        roles: undefined,
+        roles: user.roles.map((role) => role.code),
         expiresIn: parseInt(ACCESS_JWT_COOKIE_MAXAGE, 10),
       });
   };
