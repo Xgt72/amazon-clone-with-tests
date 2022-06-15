@@ -4,6 +4,7 @@ import useAuth from "@hooks/useAuth";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
 import axios from "@api/axios";
+
 const LOGIN_URL = "/login";
 
 export default function Login() {
@@ -43,9 +44,11 @@ export default function Login() {
         }
       );
       console.debug(response?.data);
-      const expiresIn = response?.data?.expiresIn;
+      const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
-      setAuth({ user: { email, roles, expiresIn } });
+      const username = response?.data.username;
+
+      setAuth({ user: { username, email, roles, accessToken } });
       setEmail("");
       setPwd("");
       console.debug(from);

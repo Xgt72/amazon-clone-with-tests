@@ -24,7 +24,13 @@ router.post(
   "/login",
   UserController.checkEmailAndPassword,
   UserController.readWithRoles,
-  JwtController.createAccessToken
+  JwtController.createAccessAndRefreshToken
+);
+
+router.get(
+  "/refresh",
+  JwtController.verifyRefreshToken,
+  JwtController.createAccessAndRefreshToken
 );
 
 module.exports = router;
