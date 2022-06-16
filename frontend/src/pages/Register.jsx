@@ -79,7 +79,7 @@ export default function Register() {
       setErrMsg("Invalid Entry");
     } else {
       try {
-        const response = await axios.post(
+        await axios.post(
           REGISTER_URL,
           JSON.stringify({ username: user, email, password: pwd }),
           {
