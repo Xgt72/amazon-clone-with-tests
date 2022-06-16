@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import useAxiosPrivate from "@hooks/useAxiosPrivate";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
   const axiosPrivate = useAxiosPrivate();
-
-  console.debug(axiosPrivate);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     let isMounted = true;
@@ -16,12 +17,13 @@ export default function Users() {
         const response = await axiosPrivate.get("users", {
           signal: controller.signal,
         });
-        console.debug(response.data);
+        // console.debug(response.data);
         if (isMounted) {
           setUsers(response.data);
         }
       } catch (err) {
         console.error(err.message);
+        navigate("/login", { state: { from: location }, replace: true });
       }
     };
     getUsers();

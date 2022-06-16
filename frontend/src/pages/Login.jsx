@@ -43,7 +43,7 @@ export default function Login() {
           withCredentials: true,
         }
       );
-      console.debug(response?.data);
+      // console.debug(response?.data);
       const accessToken = response?.data?.accessToken;
       const roles = response?.data?.roles;
       const username = response?.data.username;
@@ -51,7 +51,7 @@ export default function Login() {
       setAuth({ user: { username, email, roles, accessToken } });
       setEmail("");
       setPwd("");
-      console.debug(from);
+      // console.debug(from);
       navigate(from, { replace: true });
     } catch (err) {
       if (!err?.response) {

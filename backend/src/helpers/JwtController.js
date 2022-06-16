@@ -3,8 +3,6 @@ const jwt = require("jsonwebtoken");
 const {
   ACCESS_JWT_SECRET,
   ACCESS_JWT_EXPIRESIN,
-  ACCESS_JWT_COOKIE_MAXAGE,
-  ACCESS_JWT_COOKIE_SECURE,
   REFRESH_JWT_SECRET,
   REFRESH_JWT_EXPIRESIN,
   REFRESH_JWT_COOKIE_MAXAGE,
@@ -12,7 +10,35 @@ const {
 } = process.env;
 
 class JwtController {
-  static createAccessAndRefreshToken = async (req, res) => {
+  static createAccessToken = (req, res) => {
+    const { user } = req;
+    const accessToken = jwt.sign(
+      {
+        user: {
+          username: user.username,
+          roles:
+            typeof user.roles[0] !== "number"
+              ? user.roles.map((role) => role.code)
+              : user.roles,
+        },
+      },
+      ACCESS_JWT_SECRET,
+      {
+        expiresIn: ACCESS_JWT_EXPIRESIN,
+      }
+    );
+
+    res.status(200).json({
+      username: user.username,
+      roles:
+        typeof user.roles[0] !== "number"
+          ? user.roles.map((role) => role.code)
+          : user.roles,
+      accessToken,
+    });
+  };
+
+  static createAccessAndRefreshToken = (req, res) => {
     const { user } = req;
     const accessToken = jwt.sign(
       {
@@ -64,13 +90,13 @@ class JwtController {
       });
   };
 
-  static verifyAccessToken = async (req, res, next) => {
-    const { accessToken } = req.body;
-    // console.log("accessToken: ", token);
+  static verifyAccessToken = (req, res, next) => {
+    // console.debug(req.headers.authorization);
+    const accessToken = req.headers.authorization?.split(" ")[1];
+    // console.debug("accessToken: ", accessToken);
     if (accessToken) {
       jwt.verify(accessToken, ACCESS_JWT_SECRET, (err, decoded) => {
         if (err) {
-          // console.log("error: ", err);
           res.sendStatus(403);
         } else {
           req.user = decoded;
@@ -82,7 +108,7 @@ class JwtController {
     }
   };
 
-  static verifyRefreshToken = async (req, res, next) => {
+  static verifyRefreshToken = (req, res, next) => {
     const { refreshToken } = req.cookies;
     if (refreshToken) {
       jwt.verify(refreshToken, REFRESH_JWT_SECRET, (err, decoded) => {
@@ -98,6 +124,10 @@ class JwtController {
       res.clearCookie("refreshToken");
       res.status(403).send("Unauthorized");
     }
+  };
+
+  static logout = (req, res) => {
+    return res.clearCookie("refreshToken").sendStatus(204);
   };
 }
 module.exports = JwtController;
