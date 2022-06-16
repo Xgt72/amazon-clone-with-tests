@@ -5,7 +5,7 @@ const JwtController = require("./helpers/JwtController");
 
 const router = express.Router();
 
-router.get("/users", UserController.browse);
+router.get("/users", JwtController.verifyAccessToken, UserController.browse);
 router.get("/users/:id", UserController.read);
 router.get("/users/:id/roles", UserController.readWithRoles);
 
@@ -24,7 +24,15 @@ router.post(
   "/login",
   UserController.checkEmailAndPassword,
   UserController.readWithRoles,
+  JwtController.createAccessAndRefreshToken
+);
+
+router.get(
+  "/refresh",
+  JwtController.verifyRefreshToken,
   JwtController.createAccessToken
 );
+
+router.get("/logout", JwtController.verifyAccessToken, JwtController.logout);
 
 module.exports = router;

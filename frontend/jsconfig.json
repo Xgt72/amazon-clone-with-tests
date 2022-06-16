@@ -8,6 +8,7 @@
       "@contexts/*": ["src/contexts/*"],
       "@hooks/*": ["src/hooks/*"],
       "@pages/*": ["src/pages/*"],
+      "@reducers/*": ["src/reducers/*"],
       "@services/*": ["src/services/*"]
     }
   }

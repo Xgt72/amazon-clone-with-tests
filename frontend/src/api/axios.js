@@ -1,7 +1,15 @@
 import axios from "axios";
 
-// console.log(import.meta.env);
+const BASE_URL = `${import.meta.env.VITE_API_BASE_URL}api/`;
 
 export default axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}api/`,
+  baseURL: `${BASE_URL}`,
+});
+
+export const axiosPrivate = axios.create({
+  baseURL: `${BASE_URL}`,
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
 });

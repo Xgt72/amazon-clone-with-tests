@@ -43,22 +43,22 @@ export default function Register() {
 
   useEffect(() => {
     const result = USER_REGEX.test(user);
-    console.debug(result);
-    console.debug(user);
+    // console.debug(result);
+    // console.debug(user);
     setValidName(result);
   }, [user]);
 
   useEffect(() => {
     const result = EMAIL_REGEX.test(email);
-    console.debug(result);
-    console.debug(email);
+    // console.debug(result);
+    // console.debug(email);
     setValidEmail(result);
   }, [email]);
 
   useEffect(() => {
     const result = PWD_REGEX.test(pwd);
-    console.debug(result);
-    console.debug(pwd);
+    // console.debug(result);
+    // console.debug(pwd);
     setValidPwd(result);
 
     const match = pwd === matchPwd;
@@ -79,7 +79,7 @@ export default function Register() {
       setErrMsg("Invalid Entry");
     } else {
       try {
-        const response = await axios.post(
+        await axios.post(
           REGISTER_URL,
           JSON.stringify({ username: user, email, password: pwd }),
           {
@@ -89,9 +89,9 @@ export default function Register() {
             withCredentials: true,
           }
         );
-        console.debug(response.data);
-        console.debug(response.accessToken);
-        console.debug(JSON.stringify(response));
+        // console.debug(response.data);
+        // console.debug(response.accessToken);
+        // console.debug(JSON.stringify(response));
         setSuccess(true);
         // clear input fields
       } catch (err) {

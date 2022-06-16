@@ -1,6 +1,23 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "@hooks/useAuth";
+import useAxiosPrivate from "@hooks/useAxiosPrivate";
 
 export default function Home() {
+  const { setAuth } = useAuth();
+  const navigate = useNavigate();
+  const axiosPrivate = useAxiosPrivate();
+
+  const logout = async () => {
+    try {
+      await axiosPrivate.get("logout");
+      // console.debug("You're logout");
+      setAuth({});
+      navigate("/linkpage");
+    } catch (err) {
+      navigate("/linkpage");
+    }
+  };
+
   return (
     <section>
       <h1>Home</h1>
@@ -15,7 +32,9 @@ export default function Home() {
       <br />
       <Link to="/linkpage">Go to the Link page</Link>
       <div className="flexGrow">
-        <button type="button">Sign Out</button>
+        <button type="button" onClick={logout}>
+          Sign Out
+        </button>
       </div>
     </section>
   );

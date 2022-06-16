@@ -38,9 +38,13 @@
     "import/resolver": {
       "eslint-import-resolver-custom-alias": {
         "alias": {
+          "@api": "./src/api",
           "@assets": "./src/assets",
           "@components": "./src/components",
+          "@contexts": "./src/contexts",
+          "@hooks": "./src/hooks",
           "@pages": "./src/pages",
+          "@reducers": "./src/reducers",
           "@services": "./src/services"
         },
         "extensions": [".js", ".jsx"]
