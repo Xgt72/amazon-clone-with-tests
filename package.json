@@ -1,5 +1,5 @@
 {
-  "name": "axios-user-registration-login",
+  "name": "vitest-axios-user-registration-login",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,7 +12,7 @@
     "fix": "pnpm --prefix ./frontend run fix && pnpm --prefix ./backend run fix"
   },
   "keywords": [],
-  "author": "Wild Code School",
+  "author": "Xgt, Dave Gray",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^7.2.2",
