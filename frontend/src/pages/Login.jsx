@@ -8,7 +8,7 @@ import axios from "@api/axios";
 const LOGIN_URL = "/login";
 
 export default function Login() {
-  const { setAuth } = useAuth();
+  const { dispatch } = useAuth();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -48,7 +48,10 @@ export default function Login() {
       const roles = response?.data?.roles;
       const username = response?.data.username;
 
-      setAuth({ user: { username, email, roles, accessToken } });
+      dispatch({
+        type: "LOGIN",
+        payload: { username, email, roles, accessToken },
+      });
       setEmail("");
       setPwd("");
       // console.debug(from);

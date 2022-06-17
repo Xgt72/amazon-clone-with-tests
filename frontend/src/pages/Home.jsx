@@ -3,7 +3,7 @@ import useAuth from "@hooks/useAuth";
 import useAxiosPrivate from "@hooks/useAxiosPrivate";
 
 export default function Home() {
-  const { setAuth } = useAuth();
+  const { dispatch } = useAuth();
   const navigate = useNavigate();
   const axiosPrivate = useAxiosPrivate();
 
@@ -11,7 +11,7 @@ export default function Home() {
     try {
       await axiosPrivate.get("logout");
       // console.debug("You're logout");
-      setAuth({});
+      dispatch({ type: "LOGOUT" });
       navigate("/linkpage");
     } catch (err) {
       navigate("/linkpage");
