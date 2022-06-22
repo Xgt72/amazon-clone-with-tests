@@ -25,7 +25,7 @@ app.use(express.static(path.join(__dirname, "../public/front")));
 
 // load router
 
-const router = require("./router");
+const router = require("./routes");
 
 app.use("/api", router);
 

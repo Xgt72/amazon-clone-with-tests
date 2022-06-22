@@ -4,44 +4,34 @@ const mysql = require("mysql2");
 
 let config = {
   host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
   user: process.env.DB_USER,
-  password: process.env.DB_PASS,
+  password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 };
 
 if (process.env.NODE_ENV === "test") {
   config = {
     host: process.env.DB_HOST_TEST,
-    port: process.env.DB_PORT_TEST,
+
     user: process.env.DB_USER_TEST,
-    password: process.env.DB_PASS_TEST,
+    password: process.env.DB_PASSWORD_TEST,
     database: process.env.DB_NAME_TEST,
     multipleStatements: true,
   };
 }
 
-const connection = mysql.createConnection(config);
-
-const query = (...args) => {
-  return new Promise((resolve, reject) => {
-    connection.query(...args, (err, res) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(res);
-      }
-    });
-  });
-};
+const pool = mysql.createPool(config);
 
 const closeConnection = () => {
   return new Promise((resolve, reject) => {
-    if (connection) {
-      connection.end((err) => {
+    if (pool) {
+      // console.debug("close connection");
+      pool.end((err) => {
         if (err) {
+          // console.debug("error to close connection");
           reject(err);
         } else {
+          // console.debug("no error to close connection");
           resolve();
         }
       });
@@ -52,7 +42,6 @@ const closeConnection = () => {
 };
 
 module.exports = {
-  connection,
+  connection: pool.promise(),
   closeConnection,
-  query,
 };

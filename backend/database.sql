@@ -47,7 +47,7 @@ CREATE TABLE `role`(
 CREATE TABLE `user_role`(
   `userId` int(11) UNSIGNED NOT NULL,
   `roleId` int(11) UNSIGNED NOT NULL,
-  FOREIGN KEY (`userId`) REFERENCES `user`(`id`),
+  FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`roleId`) REFERENCES `role`(`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
 
