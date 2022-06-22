@@ -1,4 +1,4 @@
-// const { closeConnection } = require("../db-connection");
+const { closeConnection } = require("../src/db-connection");
 const server = require("..");
 
 // const deleteAllData = async () => {
@@ -16,6 +16,6 @@ const closeApp = () =>
 //   await deleteAllData();
 // });
 afterAll(async () => {
-  // await closeConnection();
+  await closeConnection();
   await closeApp();
 });
