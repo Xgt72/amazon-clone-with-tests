@@ -1,4 +1,3 @@
-const { needsRehash } = require("argon2");
 const models = require("../models");
 
 class UserController {
