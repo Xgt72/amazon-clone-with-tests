@@ -8,7 +8,11 @@ services:
       DB_HOST: database
       DB_USER: root
       DB_PASSWORD: root
-      DB_NAME: amazon_clone_test
+      DB_NAME: amazon_clone
+      DB_HOST_TEST: database
+      DB_USER_TEST: root
+      DB_PASSWORD_TEST: root
+      DB_NAME_TEST: amazon_clone_test
     ports:
       - 8000:8000
     healthcheck:
