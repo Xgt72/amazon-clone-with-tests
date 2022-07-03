@@ -5,10 +5,7 @@ services:
     build: ./backend
     environment:
       APP_PORT: 8000
-      DB_HOST: database
-      DB_USER: root
-      DB_PASSWORD: root
-      DB_NAME: amazon_clone
+      NODE_ENV: test
       DB_HOST_TEST: database
       DB_USER_TEST: root
       DB_PASSWORD_TEST: root
