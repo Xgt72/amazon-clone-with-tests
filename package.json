@@ -1,5 +1,5 @@
 {
-  "name": "vitest-axios-user-registration-login",
+  "name": "amazon-clone-with-test",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,7 +12,7 @@
     "fix": "pnpm --prefix ./frontend run fix && pnpm --prefix ./backend run fix"
   },
   "keywords": [],
-  "author": "Xgt, Dave Gray",
+  "author": "Xgt",
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^7.2.2",

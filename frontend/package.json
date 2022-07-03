@@ -1,5 +1,5 @@
 {
-  "name": "registration-app",
+  "name": "amazon-clone-with-test-front",
   "private": true,
   "version": "0.0.0",
   "scripts": {
@@ -20,7 +20,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "husky": "^7.0.4",
     "prettier": "^2.7.0",
     "sass": "^1.52.3",
     "vite": "^2.9.12"
