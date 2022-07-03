@@ -3,7 +3,6 @@ services:
     depends_on:
       - database
     build: ./backend
-    command: 
     environment:
       APP_PORT: 8000
       DB_HOST: localhost
