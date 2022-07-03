@@ -1,15 +1,15 @@
 services:
   backend:
     depends_on:
-      - database
+      - mysql
     build: ./backend
     environment:
-      APP_PORT: 8000
-      NODE_ENV: test
-      DB_HOST_TEST: database
-      DB_USER_TEST: root
-      DB_PASSWORD_TEST: root
-      DB_NAME_TEST: amazon_clone_test
+      - APP_PORT=8000
+      - NODE_ENV=test
+      - DB_HOST_TEST=mysql
+      - DB_USER_TEST=root
+      - DB_PASSWORD_TEST=root
+      - DB_NAME_TEST=amazon_clone_test
     ports:
       - 8000:8000
     healthcheck:
@@ -17,8 +17,11 @@ services:
       interval: 10s
       timeout: 10s
       retries: 10
-  database:
+  mysql:
     image: mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root
+      - MYSQL_AUTHENTICATION_PLUGIN=mysql_native_password
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - 127.0.0.1:3306:3306

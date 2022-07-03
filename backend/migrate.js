@@ -6,10 +6,12 @@ const mysql = require("mysql2/promise");
 const migrate = async () => {
   const {
     DB_HOST,
+    DB_PORT,
     DB_USER,
     DB_PASSWORD,
     DB_NAME,
     DB_HOST_TEST,
+    DB_PORT_TEST,
     DB_USER_TEST,
     DB_PASSWORD_TEST,
     DB_NAME_TEST,
@@ -17,6 +19,7 @@ const migrate = async () => {
 
   let config = {
     host: DB_HOST,
+    port: DB_PORT,
     user: DB_USER,
     password: DB_PASSWORD,
   };
@@ -26,6 +29,7 @@ const migrate = async () => {
   if (process.env.NODE_ENV === "test") {
     config = {
       host: DB_HOST_TEST,
+      port: DB_PORT_TEST,
       user: DB_USER_TEST,
       password: DB_PASSWORD_TEST,
       multipleStatements: true,
