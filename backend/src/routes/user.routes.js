@@ -7,6 +7,8 @@ router.get("/:id", UserController.read);
 router.get("/:id/roles", UserController.readWithRoles);
 router.post(
   "/register",
+  UserController.validateCreationData,
+  UserController.emailAlreadyUsed,
   UserController.add,
   UserRoleController.add,
   UserController.readWithRoles

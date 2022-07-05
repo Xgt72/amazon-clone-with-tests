@@ -1,4 +1,5 @@
 const models = require("../models");
+const schemas = require("../schemas");
 
 class UserController {
   static browse = (req, res) => {
@@ -167,6 +168,27 @@ class UserController {
       return next();
     } catch (err) {
       console.error(err);
+      return res.sendStatus(500);
+    }
+  };
+
+  static validateCreationData = async (req, res, next) => {
+    const { error } = schemas.user.creation.validate(req.body);
+    if (error) {
+      return res.status(400).send(`${error.details[0].context.key} is wrong`);
+    }
+    return next();
+  };
+
+  static emailAlreadyUsed = async (req, res, next) => {
+    try {
+      const [[user]] = await models.user.findByEmail(req.body.email);
+      if (user) {
+        return res.status(400).send("email is already used");
+      }
+      return next();
+    } catch (err) {
+      console.error(err.message);
       return res.sendStatus(500);
     }
   };
