@@ -20,18 +20,6 @@ class UserRoleController {
       return res.status(500).send(err.message);
     }
   };
-
-  // static delete = (req, res) => {
-  //   models.user_role
-  //     .delete(req.params.id)
-  //     .then(() => {
-  //       res.sendStatus(204);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //       res.sendStatus(500);
-  //     });
-  // };
 }
 
 module.exports = UserRoleController;

@@ -31,7 +31,6 @@ class UserController {
   };
 
   static readByEmail = (req, res, next) => {
-    // console.debug(req.body);
     models.user
       .findByEmail(req.body.email)
       .then(([rows]) => {
@@ -109,10 +108,6 @@ class UserController {
   static edit = async (req, res) => {
     const user = req.body;
 
-    // TODO validations (length, format...)
-
-    user.id = parseInt(req.params.id, 10);
-
     try {
       const hashedPassword = await models.user.hashPassword(user.password);
       user.hashedPassword = hashedPassword;
@@ -130,8 +125,6 @@ class UserController {
       return res.sendStatus(500);
     }
   };
-
-  // add
 
   static deleteOne = async (req, res) => {
     try {
@@ -176,6 +169,22 @@ class UserController {
     const { error } = schemas.user.creation.validate(req.body);
     if (error) {
       return res.status(400).send(`${error.details[0].context.key} is wrong`);
+    }
+    return next();
+  };
+
+  static validateUpdateData = async (req, res, next) => {
+    req.body.id = parseInt(req.params.id, 10);
+    const { error } = schemas.user.update.validate(req.body);
+    if (error) {
+      const { key } = error.details[0].context;
+      return res
+        .status(400)
+        .send(
+          key === "password" || key === "id"
+            ? `${error.details[0].context.key} is wrong`
+            : "You must provide valid data"
+        );
     }
     return next();
   };

@@ -117,4 +117,12 @@ describe("Users Routes", () => {
     expect(res.statusCode).toBe(400);
     expect(res.text).toEqual("email is already used");
   });
+
+  it("PUT's /api/users/1, should return 400 status, if we provide an email", async () => {
+    const res = await request(app)
+      .put("/api/users/1")
+      .send({ password: "Test@5678", email: "newEmail@gmail.com" });
+    expect(res.statusCode).toBe(400);
+    expect(res.text).toEqual("You must provide valid data");
+  });
 });

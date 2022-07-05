@@ -13,7 +13,7 @@ router.post(
   UserRoleController.add,
   UserController.readWithRoles
 );
-router.put("/:id", UserController.edit);
+router.put("/:id", UserController.validateUpdateData, UserController.edit);
 router.delete("/:id", UserController.deleteOne);
 
 module.exports = router;
