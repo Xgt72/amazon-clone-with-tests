@@ -103,4 +103,26 @@ describe("Users Routes", () => {
     expect(res.body.length).toBe(1);
     expect(res.body[0].username).toEqual(user.username);
   });
+
+  it("POST's /api/users/register, should return an error if password not matches the rules", async () => {
+    const res = await request(app)
+      .post("/api/users/register")
+      .send({ ...userTwo, password: "test@123" });
+    expect(res.statusCode).toBe(400);
+    expect(res.text).toEqual("password is wrong");
+  });
+
+  it("POST's /api/users/register, should return an error if email is already used", async () => {
+    const res = await request(app).post("/api/users/register").send(user);
+    expect(res.statusCode).toBe(400);
+    expect(res.text).toEqual("email is already used");
+  });
+
+  it("PUT's /api/users/1, should return 400 status, if we provide an email", async () => {
+    const res = await request(app)
+      .put("/api/users/1")
+      .send({ password: "Test@5678", email: "newEmail@gmail.com" });
+    expect(res.statusCode).toBe(400);
+    expect(res.text).toEqual("You must provide valid data");
+  });
 });

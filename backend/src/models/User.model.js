@@ -12,9 +12,7 @@ function findAll() {
 }
 
 function findByEmail(email) {
-  return connection.query(`select * from  ${this.table} where email=?`, [
-    email,
-  ]);
+  return connection.query(`select * from  ${table} where email=?`, [email]);
 }
 
 function insertOne(user) {
