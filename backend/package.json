@@ -10,7 +10,7 @@
     "start": "node index.js",
     "lint": "echo '----- Checking Backend...' && npx prettier --debug-check . && eslint --ext .js . && echo '----- Done!'",
     "fix": "prettier --write . && eslint --fix --ext .js .",
-    "test": "NODE_ENV=test jest --watch --maxWorkers=1"
+    "test": "NODE_ENV=test jest --maxWorkers=1"
   },
   "jest": {
     "testEnvironment": "node",
