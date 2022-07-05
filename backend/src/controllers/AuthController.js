@@ -61,5 +61,43 @@ class AuthController {
         accessToken,
       });
   };
+
+  static verifyAccessToken = (req, res, next) => {
+    const accessToken = req.headers.authorization?.split(" ")[1];
+    if (accessToken) {
+      jwt.verify(accessToken, ACCESS_JWT_SECRET, (err, decoded) => {
+        if (err) {
+          res.sendStatus(403);
+        } else {
+          req.user = decoded;
+          next();
+        }
+      });
+    } else {
+      res.status(403).send("Unauthorized");
+    }
+  };
+
+  static verifyRefreshToken = (req, res, next) => {
+    const { refreshToken } = req.cookies;
+    if (refreshToken) {
+      jwt.verify(refreshToken, REFRESH_JWT_SECRET, (err, decoded) => {
+        if (err) {
+          res.clearCookie("refreshToken");
+          res.sendStatus(403);
+        } else {
+          req.user = decoded.user;
+          next();
+        }
+      });
+    } else {
+      res.clearCookie("refreshToken");
+      res.status(403).send("Unauthorized");
+    }
+  };
+
+  static logout = (req, res) => {
+    return res.clearCookie("refreshToken").sendStatus(204);
+  };
 }
 module.exports = AuthController;
