@@ -7,6 +7,7 @@ const {
 } = require("../controllers");
 
 router.get("/", UserController.browse);
+router.get("/logout", AuthController.verifyAccessToken, AuthController.logout);
 router.get("/:id", UserController.read);
 router.get("/:id/roles", UserController.readWithRoles);
 router.post(

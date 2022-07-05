@@ -8,6 +8,8 @@ const user = {
   password: "Test@123",
 };
 
+let accessToken = "";
+
 describe("Auth Routes", () => {
   beforeAll(async () => {
     await connection.query("DELETE FROM user_role");
@@ -28,6 +30,8 @@ describe("Auth Routes", () => {
     expect(res.body.roles[0]).toEqual(2001);
     expect(res.body.accessToken).toBeDefined();
 
+    accessToken = res.body.accessToken;
+
     const regex = /\brefreshToken\b/;
     expect(
       res.headers["set-cookie"].find((element) => regex.test(element))
@@ -44,5 +48,17 @@ describe("Auth Routes", () => {
       .post("/api/users/login")
       .send({ email: "test-ohter@gmail.com", password: user.password });
     expect(res.statusCode).toBe(401);
+  });
+
+  it("GET's /api/users/logout, should return 204 status if user have an accessToken", async () => {
+    const res = await request(app)
+      .get("/api/users/logout")
+      .set("Authorization", `Bearer ${accessToken}`);
+    expect(res.statusCode).toBe(204);
+  });
+
+  it("GET's /api/users/logout, should return 403 status if user don't have an accessToken", async () => {
+    const res = await request(app).get("/api/users/logout");
+    expect(res.statusCode).toBe(403);
   });
 });
