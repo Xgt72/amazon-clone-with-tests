@@ -1,9 +1,11 @@
 name: integration-test-workflow
 
-on: pull_request
+on:
+  pull_request:
+    branches: [main, dev]
 
 jobs:
-  test-client:
+  test-back:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

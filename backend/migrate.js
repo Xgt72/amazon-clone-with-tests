@@ -22,6 +22,7 @@ const migrate = async () => {
     port: DB_PORT,
     user: DB_USER,
     password: DB_PASSWORD,
+    multipleStatements: true,
   };
 
   let dbName = DB_NAME;
@@ -36,6 +37,8 @@ const migrate = async () => {
     };
     dbName = DB_NAME_TEST;
   }
+
+  // console.debug(config, dbName);
 
   const connection = await mysql.createConnection(config);
 

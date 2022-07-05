@@ -1,7 +1,33 @@
-FROM node:lts-alpine
+FROM node:16
 
-RUN mkdir app
-WORKDIR /app
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
+
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+ARG APP_PORT=${APP_PORT}
+ENV APP_PORT=${APP_PORT}
+ARG DB_HOST=${DB_HOST}
+ENV DB_HOST=${DB_HOST}
+ARG DB_PORT=${DB_PORT}
+ENV DB_PORT=${DB_PORT}
+ARG DB_USER=${DB_USER}
+ENV DB_USER=${DB_USER}
+ARG DB_PASSWORD=${DB_PASSWORD}
+ENV DB_PASSWORD=${DB_PASSWORD}
+ARG DB_NAME=${DB_NAME}
+ENV DB_NAME=${DB_NAME}
+ARG DB_HOST_TEST=${DB_HOST_TEST}
+ENV DB_HOST_TEST=${DB_HOST_TEST}
+ARG DB_PORT_TEST=${DB_PORT_TEST}
+ENV DB_PORT_TEST=${DB_PORT_TEST}
+ARG DB_USER_TEST=${DB_USER_TEST}
+ENV DB_USER_TEST=${DB_USER_TEST}
+ARG DB_PASSWORD_TEST=${DB_PASSWORD_TEST}
+ENV DB_PASSWORD_TEST=${DB_PASSWORD_TEST}
+ARG DB_NAME=${DB_NAME}
+ENV DB_NAME=${DB_NAME}
+ARG CLIENT_URL=${CLIENT_URL}
+ENV CLIENT_URL=${CLIENT_URL}
 
 COPY package.json ./
 RUN npm install
@@ -10,8 +36,7 @@ COPY ./index.js ./index.js
 COPY ./migrate.js ./migrate.js
 COPY ./database.sql ./database.sql
 COPY ./src ./src
-COPY ./tests ./tests
+COPY ./tests ./tests 
+COPY ./scripts ./scripts
 
-RUN npm run migrate:test
-
-CMD npm run test
+CMD ["npm", "dev"]
