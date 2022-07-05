@@ -27,6 +27,12 @@ services:
             - DB_PASSWORD_TEST=root
             - DB_NAME_TEST=amazon_clone_test
             - CLIENT_URL=http://localhost:3000
+            - ACCESS_JWT_SECRET=vYDvp5cOC5D3ixW2PH0lVb1kjnvRBjyZOHehOd9zeANe1h4uY13jk93WyCAbT92
+            - ACCESS_JWT_EXPIRESIN=60s
+            - REFRESH_JWT_SECRET=4VK07QhOIWXeIMJisrpycdKOJT1Jf7n4bgiJsCjzpllFDTvU2MdTWtRcS1cHGiv
+            - REFRESH_JWT_EXPIRESIN=1h
+            - REFRESH_JWT_COOKIE_MAXAGE=3600000
+            - REFRESH_JWT_COOKIE_SECURE=false
         ports:
             - "8000:8000"
         command: 'bash -c "chmod u+x ./scripts/wait-for-it.sh && ./scripts/wait-for-it.sh db:3306 && npm run migrate:test && npm run test"'
