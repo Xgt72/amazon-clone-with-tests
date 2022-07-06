@@ -9,6 +9,7 @@ const user = {
 };
 
 let accessToken = "";
+let refreshToken = "";
 
 describe("Auth Routes", () => {
   beforeAll(async () => {
@@ -36,6 +37,10 @@ describe("Auth Routes", () => {
     expect(
       res.headers["set-cookie"].find((element) => regex.test(element))
     ).toBeDefined();
+    // eslint-disable-next-line prefer-destructuring
+    refreshToken = res.headers["set-cookie"]
+      .find((element) => regex.test(element))
+      .split("; ")[0];
   });
 
   it("POST's /api/users/login, should return 400 status if email or password are not provided", async () => {
@@ -59,6 +64,21 @@ describe("Auth Routes", () => {
 
   it("GET's /api/users/logout, should return 403 status if user don't have an accessToken", async () => {
     const res = await request(app).get("/api/users/logout");
+    expect(res.statusCode).toBe(403);
+  });
+
+  it("GET's /api/users/refresh, should return username, roles, accessToken if in cookie there is a valid refreshToken", async () => {
+    const res = await request(app)
+      .get("/api/users/refresh")
+      .set("Cookie", refreshToken);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.username).toEqual(user.username);
+    expect(res.body.roles[0]).toEqual(2001);
+    expect(res.body.accessToken).toBeDefined();
+  });
+
+  it("GET's /api/users/refresh, 403 status if user don't have a valid refreshToken", async () => {
+    const res = await request(app).get("/api/users/refresh");
     expect(res.statusCode).toBe(403);
   });
 });

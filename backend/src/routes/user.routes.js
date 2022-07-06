@@ -6,8 +6,13 @@ const {
   AuthController,
 } = require("../controllers");
 
-router.get("/", UserController.browse);
+router.get("/", AuthController.verifyAccessToken, UserController.browse);
 router.get("/logout", AuthController.verifyAccessToken, AuthController.logout);
+router.get(
+  "/refresh",
+  AuthController.verifyRefreshToken,
+  AuthController.createAccessToken
+);
 router.get("/:id", UserController.read);
 router.get("/:id/roles", UserController.readWithRoles);
 router.post(
