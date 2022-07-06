@@ -14,6 +14,8 @@ const userTwo = {
   password: "Test@1234",
 };
 
+let accessToken = "";
+
 describe("Users Routes", () => {
   beforeAll(async () => {
     await connection.query("DELETE FROM user_role");
@@ -23,12 +25,6 @@ describe("Users Routes", () => {
     await connection.query("ALTER TABLE user AUTO_INCREMENT=1");
   });
 
-  it("GET's /api/users, should return an empty array", async () => {
-    const res = await request(app).get("/api/users");
-    expect(res.statusCode).toBe(200);
-    expect(res.body.length).toBe(0);
-  });
-
   it("POST's /api/users/register, should return a new user", async () => {
     const res = await request(app).post("/api/users/register").send(user);
     expect(res.statusCode).toBe(201);
@@ -36,10 +32,17 @@ describe("Users Routes", () => {
     expect(res.body.email).toEqual(user.email);
     expect(res.body.password).toBe(undefined);
     expect(res.body.roles.length).toBeGreaterThan(0);
+
+    const { body } = await request(app)
+      .post("/api/users/login")
+      .send({ email: user.email, password: user.password });
+    accessToken = body.accessToken;
   });
 
   it("GET's /api/users, should return an array with one user", async () => {
-    const res = await request(app).get("/api/users");
+    const res = await request(app)
+      .get("/api/users")
+      .set("Authorization", `Bearer ${accessToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toBe(1);
   });
@@ -98,7 +101,9 @@ describe("Users Routes", () => {
   });
 
   it("GET's /api/users, should return an array with user 'John Doe'", async () => {
-    const res = await request(app).get("/api/users");
+    const res = await request(app)
+      .get("/api/users")
+      .set("Authorization", `Bearer ${accessToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toBe(1);
     expect(res.body[0].username).toEqual(user.username);

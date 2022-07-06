@@ -10,6 +10,34 @@ const {
 } = process.env;
 
 class AuthController {
+  static createAccessToken = (req, res) => {
+    const { user } = req;
+    const accessToken = jwt.sign(
+      {
+        user: {
+          username: user.username,
+          roles:
+            typeof user.roles[0] !== "number"
+              ? user.roles.map((role) => role.code)
+              : user.roles,
+        },
+      },
+      ACCESS_JWT_SECRET,
+      {
+        expiresIn: ACCESS_JWT_EXPIRESIN,
+      }
+    );
+
+    res.status(200).json({
+      username: user.username,
+      roles:
+        typeof user.roles[0] !== "number"
+          ? user.roles.map((role) => role.code)
+          : user.roles,
+      accessToken,
+    });
+  };
+
   static createAccessAndRefreshToken = (req, res) => {
     const { user } = req;
     const accessToken = jwt.sign(
