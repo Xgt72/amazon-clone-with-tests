@@ -79,6 +79,7 @@ describe("Users Routes", () => {
   it("PUT's /api/users/1, should return 204 status", async () => {
     const res = await request(app)
       .put("/api/users/1")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send({ password: "Test@5678" });
     expect(res.statusCode).toBe(204);
   });
@@ -86,17 +87,22 @@ describe("Users Routes", () => {
   it("PUT's /api/users/3, should return 404 status", async () => {
     const res = await request(app)
       .put("/api/users/4")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send({ password: "Test@5678" });
     expect(res.statusCode).toBe(404);
   });
 
   it("DELETE's /api/users/2, should return 204 status", async () => {
-    const res = await request(app).delete("/api/users/2");
+    const res = await request(app)
+      .delete("/api/users/2")
+      .set("Authorization", `Bearer ${accessToken}`);
     expect(res.statusCode).toBe(204);
   });
 
   it("DELETE's /api/users/3, should return 404 status", async () => {
-    const res = await request(app).delete("/api/users/3");
+    const res = await request(app)
+      .delete("/api/users/3")
+      .set("Authorization", `Bearer ${accessToken}`);
     expect(res.statusCode).toBe(404);
   });
 
@@ -126,6 +132,7 @@ describe("Users Routes", () => {
   it("PUT's /api/users/1, should return 400 status, if we provide an email", async () => {
     const res = await request(app)
       .put("/api/users/1")
+      .set("Authorization", `Bearer ${accessToken}`)
       .send({ password: "Test@5678", email: "newEmail@gmail.com" });
     expect(res.statusCode).toBe(400);
     expect(res.text).toEqual("You must provide valid data");
