@@ -29,7 +29,16 @@ router.post(
   UserRoleController.add,
   UserController.readWithRoles
 );
-router.put("/:id", UserController.validateUpdateData, UserController.edit);
-router.delete("/:id", UserController.deleteOne);
+router.put(
+  "/:id",
+  AuthController.verifyAccessToken,
+  UserController.validateUpdateData,
+  UserController.edit
+);
+router.delete(
+  "/:id",
+  AuthController.verifyAccessToken,
+  UserController.deleteOne
+);
 
 module.exports = router;
