@@ -45,6 +45,18 @@ CREATE TABLE `product` (
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
 
 --
+-- Structure de la table `order`
+--
+CREATE TABLE `order` (
+  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `userId` INT NOT NULL,
+  `paymentIntentId` VARCHAR(255),
+  `amount` DECIMAL(7, 2) NOT NULL DEFAULT 0.00,
+  `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET = latin1;
+
+--
 -- Contenu de la table `role`
 --
 INSERT INTO
