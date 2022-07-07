@@ -85,7 +85,7 @@ describe("Products Routes", () => {
     expect(res.statusCode).toBe(400);
   });
 
-  it("PUT's /api/products/3, should return 404 status", async () => {
+  it("PUT's /api/products/4, should return 404 status", async () => {
     const res = await request(app)
       .put("/api/products/4")
       .set("Authorization", `Bearer ${accessToken}`)

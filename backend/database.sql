@@ -8,17 +8,17 @@ SET
 -- Structure de la table `user`
 --
 CREATE TABLE `user` (
-  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `username` varchar(255),
-  `email` varchar(255) UNIQUE NOT NULL,
-  `hashedPassword` varchar(255) NOT NULL
+  `id` INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `username` VARCHAR(255),
+  `email` VARCHAR(255) UNIQUE NOT NULL,
+  `hashedPassword` VARCHAR(255) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
 
 --
 -- Structure de la table `role`
 --
 CREATE TABLE `role` (
-  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `id` INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `title` VARCHAR(50) NOT NULL,
   `code` INT(4) NOT NULL
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
@@ -27,8 +27,8 @@ CREATE TABLE `role` (
 -- Structure de la table `user_role`
 --
 CREATE TABLE `user_role`(
-  `userId` int(11) UNSIGNED NOT NULL,
-  `roleId` int(11) UNSIGNED NOT NULL,
+  `userId` INT(11) UNSIGNED NOT NULL,
+  `roleId` INT(11) UNSIGNED NOT NULL,
   FOREIGN KEY (`userId`) REFERENCES `user`(`id`) ON DELETE CASCADE,
   FOREIGN KEY (`roleId`) REFERENCES `role`(`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
@@ -37,7 +37,7 @@ CREATE TABLE `user_role`(
 -- Structure de la table `product`
 --
 CREATE TABLE `product` (
-  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `id` INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `title` VARCHAR(255) NOT NULL,
   `price` DECIMAL(7, 2) NOT NULL DEFAULT 0.00,
   `image` VARCHAR(255),
@@ -45,11 +45,11 @@ CREATE TABLE `product` (
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
 
 --
--- Structure de la table `order`
+-- Structure de la table `command`
 --
-CREATE TABLE `order` (
-  `id` int(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  `userId` INT NOT NULL,
+CREATE TABLE `command` (
+  `id` INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `userId` INT(11) UNSIGNED NOT NULL,
   `paymentIntentId` VARCHAR(255),
   `amount` DECIMAL(7, 2) NOT NULL DEFAULT 0.00,
   `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

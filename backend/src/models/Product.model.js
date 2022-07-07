@@ -15,7 +15,7 @@ function insertOne(product) {
 }
 
 function updateOne(id, productData) {
-  let sql = "UPDATE product SET ";
+  let sql = `UPDATE ${table} SET `;
   const values = Object.values(productData);
   const properties = Object.keys(productData);
   sql += properties.join("=?, ");
