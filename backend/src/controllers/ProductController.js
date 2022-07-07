@@ -103,14 +103,7 @@ class ProductController {
     req.body.id = parseInt(req.params.id, 10);
     const { error } = schemas.product.update.validate(req.body);
     if (error) {
-      const { key } = error.details[0].context;
-      return res
-        .status(400)
-        .send(
-          key === "password" || key === "id"
-            ? `${error.details[0].context.key} is wrong`
-            : "You must provide valid data"
-        );
+      return res.status(400).send("You must provide valid data");
     }
     return next();
   };
