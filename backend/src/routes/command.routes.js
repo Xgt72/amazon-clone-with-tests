@@ -1,6 +1,10 @@
 const router = require("express").Router();
 
-const { CommandController, AuthController } = require("../controllers");
+const {
+  CommandController,
+  AuthController,
+  BasketController,
+} = require("../controllers");
 
 router.get("/", CommandController.browse);
 router.get("/:id", AuthController.verifyAccessToken, CommandController.read);
@@ -10,6 +14,11 @@ router.post(
   CommandController.validateCreationData,
   CommandController.add,
   CommandController.read
+);
+router.post(
+  "/:commandId/baskets",
+  BasketController.createMultiple,
+  BasketController.getAllByCommandId
 );
 router.put(
   "/:id",

@@ -2,20 +2,7 @@ const request = require("supertest");
 const app = require("../src/app");
 const { connection } = require("../src/db-connection");
 
-const user = {
-  username: "John Doe",
-  email: "test@gmail.com",
-  password: "Test@123",
-};
-
-const product = {
-  title:
-    "Nintendo Switch avec paire de Joy-Con Rouge N&eacute;on et Bleu N&eacute;on",
-  price: 329.99,
-  image:
-    "https://images-na.ssl-images-amazon.com/images/I/71r5EDssKdL._AC_SX679_.jpg",
-  rating: 5,
-};
+const { userOne, productOne } = require("./testData");
 
 let accessToken = "";
 
@@ -27,12 +14,13 @@ describe("Products Routes", () => {
     await connection.query("DELETE FROM user");
     await connection.query("ALTER TABLE user AUTO_INCREMENT=1");
 
-    await connection.query("TRUNCATE TABLE product");
+    await connection.query("DELETE FROM product");
+    await connection.query("ALTER TABLE product AUTO_INCREMENT=1");
 
-    await request(app).post("/api/users/register").send(user);
+    await request(app).post("/api/users/register").send(userOne);
     const { body } = await request(app)
       .post("/api/users/login")
-      .send({ email: user.email, password: user.password });
+      .send({ email: userOne.email, password: userOne.password });
     accessToken = body.accessToken;
   });
 
@@ -40,12 +28,12 @@ describe("Products Routes", () => {
     const res = await request(app)
       .post("/api/products")
       .set("Authorization", `Bearer ${accessToken}`)
-      .send(product);
+      .send(productOne);
     expect(res.statusCode).toBe(201);
-    expect(res.body.title).toEqual(product.title);
-    expect(res.body.price).toEqual(product.price);
-    expect(res.body.image).toEqual(product.image);
-    expect(res.body.rating).toEqual(product.rating);
+    expect(res.body.title).toEqual(productOne.title);
+    expect(res.body.price).toEqual(productOne.price);
+    expect(res.body.image).toEqual(productOne.image);
+    expect(res.body.rating).toEqual(productOne.rating);
   });
 
   it("GET's /api/products, should return an array with one product", async () => {

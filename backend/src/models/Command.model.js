@@ -23,6 +23,12 @@ function findAllByUserId(userId, orderBy, flow) {
   return connection.query(sql, sqlValues);
 }
 
+function findAllWithBasketsByUserId(userId) {
+  const sql = `SELECT c.id, c.paymentIntentId, c.amount, c.created, b.productId, b.quantity, p.title, p.price, p.image, p.rating FROM ${table} c JOIN basket b ON b.commandId=c.id JOIN product p ON p.id=b.productId WHERE userId=? ORDER BY c.created DESC`;
+  const sqlValues = [userId];
+  return connection.query(sql, sqlValues);
+}
+
 function insertOne(command) {
   return connection.query(`insert into ${table} set ?`, [command]);
 }
@@ -44,6 +50,7 @@ module.exports = {
   findOneById,
   findAll,
   findAllByUserId,
+  findAllWithBasketsByUserId,
   insertOne,
   updateOne,
   deleteOne,

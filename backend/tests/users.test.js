@@ -2,17 +2,7 @@ const request = require("supertest");
 const app = require("../src/app");
 const { connection } = require("../src/db-connection");
 
-const user = {
-  username: "John Doe",
-  email: "test@gmail.com",
-  password: "Test@123",
-};
-
-const userTwo = {
-  username: "Jane Doe",
-  email: "test1@gmail.com",
-  password: "Test@1234",
-};
+const { userOne, userTwo } = require("./testData");
 
 let accessToken = "";
 
@@ -26,16 +16,16 @@ describe("Users Routes", () => {
   });
 
   it("POST's /api/users/register, should return a new user", async () => {
-    const res = await request(app).post("/api/users/register").send(user);
+    const res = await request(app).post("/api/users/register").send(userOne);
     expect(res.statusCode).toBe(201);
-    expect(res.body.username).toEqual(user.username);
-    expect(res.body.email).toEqual(user.email);
+    expect(res.body.username).toEqual(userOne.username);
+    expect(res.body.email).toEqual(userOne.email);
     expect(res.body.password).toBe(undefined);
     expect(res.body.roles.length).toBeGreaterThan(0);
 
     const { body } = await request(app)
       .post("/api/users/login")
-      .send({ email: user.email, password: user.password });
+      .send({ email: userOne.email, password: userOne.password });
     accessToken = body.accessToken;
   });
 
@@ -112,7 +102,7 @@ describe("Users Routes", () => {
       .set("Authorization", `Bearer ${accessToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.length).toBe(1);
-    expect(res.body[0].username).toEqual(user.username);
+    expect(res.body[0].username).toEqual(userOne.username);
   });
 
   it("POST's /api/users/register, should return an error if password not matches the rules", async () => {
@@ -124,7 +114,7 @@ describe("Users Routes", () => {
   });
 
   it("POST's /api/users/register, should return an error if email is already used", async () => {
-    const res = await request(app).post("/api/users/register").send(user);
+    const res = await request(app).post("/api/users/register").send(userOne);
     expect(res.statusCode).toBe(400);
     expect(res.text).toEqual("email is already used");
   });

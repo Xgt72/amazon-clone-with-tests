@@ -37,6 +37,9 @@ class CommandController {
 
   static add = async (req, res, next) => {
     const command = req.body;
+    if (!command.userId) {
+      command.userId = parseInt(req.params.id, 10);
+    }
 
     try {
       const [result] = await models.command.insertOne(command);
@@ -100,6 +103,28 @@ class CommandController {
       return res.status(400).send("You must provide valid data");
     }
     return next();
+  };
+
+  static getAllByUserId = async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const { orderBy, flow } = req.query;
+
+    try {
+      const [commands] = await models.command.findAllByUserId(
+        id,
+        orderBy,
+        flow
+      );
+
+      if (commands.length === 0) {
+        return res.sendStatus(404);
+      }
+
+      return res.status(200).send(commands);
+    } catch (err) {
+      console.error(err.message);
+      return res.sendStatus(500);
+    }
   };
 }
 

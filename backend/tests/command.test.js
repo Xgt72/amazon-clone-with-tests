@@ -2,30 +2,10 @@ const request = require("supertest");
 const app = require("../src/app");
 const { connection } = require("../src/db-connection");
 
-const user = {
-  username: "John Doe",
-  email: "test@gmail.com",
-  password: "Test@123",
-};
+const { userOne } = require("./testData");
+let { command } = require("./testData");
 
-// const product = {
-//   title:
-//     "Nintendo Switch avec paire de Joy-Con Rouge N&eacute;on et Bleu N&eacute;on",
-//   price: 329.99,
-//   image:
-//     "https://images-na.ssl-images-amazon.com/images/I/71r5EDssKdL._AC_SX679_.jpg",
-//   rating: 5,
-// };
-
-let userId;
 let accessToken = "";
-// let productId;
-
-let command = {
-  userId,
-  paymentIntentId: "testggsggs",
-  amount: 156.8,
-};
 
 describe("Commands Routes", () => {
   beforeAll(async () => {
@@ -35,26 +15,17 @@ describe("Commands Routes", () => {
     await connection.query("DELETE FROM user");
     await connection.query("ALTER TABLE user AUTO_INCREMENT=1");
 
-    // await connection.query("DELETE FROM product");
-    // await connection.query("ALTER TABLE product AUTO_INCREMENT=1");
-
     await connection.query("DELETE FROM command");
     await connection.query("ALTER TABLE command AUTO_INCREMENT=1");
 
-    let res = await request(app).post("/api/users/register").send(user);
-    userId = res.body.id;
-    command.userId = userId;
+    let res = await request(app).post("/api/users/register").send(userOne);
+    userOne.id = res.body.id;
+    command.userId = userOne.id;
 
     res = await request(app)
       .post("/api/users/login")
-      .send({ email: user.email, password: user.password });
+      .send({ email: userOne.email, password: userOne.password });
     accessToken = res.body.accessToken;
-
-    // res = await request(app)
-    //   .post("/api/products")
-    //   .set("Authorization", `Bearer ${accessToken}`)
-    //   .send(product);
-    // productId = res.body.id;
   });
 
   it("POST's /api/commands, should return a new command", async () => {
@@ -88,6 +59,13 @@ describe("Commands Routes", () => {
       .get("/api/commands/2")
       .set("Authorization", `Bearer ${accessToken}`);
     expect(res.statusCode).toBe(404);
+  });
+
+  it("GET's /api/users/1/commands, should return an array with one command", async () => {
+    const res = await request(app).get("/api/users/1/commands");
+    expect(res.statusCode).toBe(200);
+    expect(res.body.length).toEqual(1);
+    expect(res.body[0].userId).toEqual(1);
   });
 
   it("PUT's /api/commands/1, should return 204 status", async () => {
@@ -136,5 +114,20 @@ describe("Commands Routes", () => {
   it("DELETE's /api/commands/3, should return 403 status if we not provide an accessToken", async () => {
     const res = await request(app).delete("/api/commands/3");
     expect(res.statusCode).toBe(403);
+  });
+
+  it("POST's /api/users/1/commands, should return a new command", async () => {
+    const res = await request(app)
+      .post("/api/users/1/commands")
+      .set("Authorization", `Bearer ${accessToken}`)
+      .send({
+        paymentIntentId: command.paymentIntentId,
+        amount: command.ammount,
+      });
+    command = res.body;
+    expect(res.statusCode).toBe(201);
+    expect(res.body.userId).toEqual(1);
+    expect(res.body.paymentIntentId).toEqual(command.paymentIntentId);
+    expect(res.body.amount).toEqual(command.amount);
   });
 });
