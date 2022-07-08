@@ -1,9 +1,11 @@
 const router = require("express").Router();
 
 const {
+  AuthController,
+  BasketController,
+  CommandController,
   UserController,
   UserRoleController,
-  AuthController,
 } = require("../controllers");
 
 router.get("/", AuthController.verifyAccessToken, UserController.browse);
@@ -39,6 +41,18 @@ router.delete(
   "/:id",
   AuthController.verifyAccessToken,
   UserController.deleteOne
+);
+router.get("/:id/commands", CommandController.getAllByUserId);
+router.post("/:id/commands", CommandController.add, CommandController.read);
+
+router.get(
+  "/:id/commands/baskets",
+  BasketController.getAllCommandsAndBasketsByUserId
+);
+router.post(
+  "/:id/commands/:commandId/baskets",
+  BasketController.createMultiple,
+  BasketController.getAllByCommandId
 );
 
 module.exports = router;

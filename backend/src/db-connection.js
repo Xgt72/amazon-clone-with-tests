@@ -8,6 +8,7 @@ let config = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  decimalNumbers: true,
 };
 
 if (process.env.NODE_ENV === "test") {
@@ -17,6 +18,7 @@ if (process.env.NODE_ENV === "test") {
     user: process.env.DB_USER_TEST,
     password: process.env.DB_PASSWORD_TEST,
     database: process.env.DB_NAME_TEST,
+    decimalNumbers: true,
     multipleStatements: true,
   };
 }

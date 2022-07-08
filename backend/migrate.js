@@ -22,6 +22,7 @@ const migrate = async () => {
     port: DB_PORT,
     user: DB_USER,
     password: DB_PASSWORD,
+    decimalNumbers: true,
     multipleStatements: true,
   };
 
@@ -33,6 +34,7 @@ const migrate = async () => {
       port: DB_PORT_TEST,
       user: DB_USER_TEST,
       password: DB_PASSWORD_TEST,
+      decimalNumbers: true,
       multipleStatements: true,
     };
     dbName = DB_NAME_TEST;

@@ -2,11 +2,7 @@ const request = require("supertest");
 const app = require("../src/app");
 const { connection } = require("../src/db-connection");
 
-const user = {
-  username: "John Doe",
-  email: "test@gmail.com",
-  password: "Test@123",
-};
+const { userOne } = require("./testData");
 
 let accessToken = "";
 let refreshToken = "";
@@ -19,15 +15,15 @@ describe("Auth Routes", () => {
     await connection.query("DELETE FROM user");
     await connection.query("ALTER TABLE user AUTO_INCREMENT=1");
 
-    await request(app).post("/api/users/register").send(user);
+    await request(app).post("/api/users/register").send(userOne);
   });
 
   it("POST's /api/users/login, should return username, roles, accessToken and in cookie a refreshToken", async () => {
     const res = await request(app)
       .post("/api/users/login")
-      .send({ email: user.email, password: user.password });
+      .send({ email: userOne.email, password: userOne.password });
     expect(res.statusCode).toBe(200);
-    expect(res.body.username).toEqual(user.username);
+    expect(res.body.username).toEqual(userOne.username);
     expect(res.body.roles[0]).toEqual(2001);
     expect(res.body.accessToken).toBeDefined();
 
@@ -51,7 +47,7 @@ describe("Auth Routes", () => {
   it("POST's /api/users/login, should return 401 status if the user is unknow", async () => {
     const res = await request(app)
       .post("/api/users/login")
-      .send({ email: "test-ohter@gmail.com", password: user.password });
+      .send({ email: "test-ohter@gmail.com", password: userOne.password });
     expect(res.statusCode).toBe(401);
   });
 
@@ -72,7 +68,7 @@ describe("Auth Routes", () => {
       .get("/api/users/refresh")
       .set("Cookie", refreshToken);
     expect(res.statusCode).toBe(200);
-    expect(res.body.username).toEqual(user.username);
+    expect(res.body.username).toEqual(userOne.username);
     expect(res.body.roles[0]).toEqual(2001);
     expect(res.body.accessToken).toBeDefined();
   });
