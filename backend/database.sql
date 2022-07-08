@@ -57,6 +57,18 @@ CREATE TABLE `command` (
 ) ENGINE = InnoDB DEFAULT CHARSET = latin1;
 
 --
+-- Structure de la table `basket`
+--
+CREATE TABLE `basket` (
+  `id` INT(11) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `commandId` INT(11) UNSIGNED NOT NULL,
+  `productId` INT(11) UNSIGNED NOT NULL,
+  `quantity` INT UNSIGNED NOT NULL,
+  FOREIGN KEY (`commandId`) REFERENCES `command`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`productId`) REFERENCES `product`(`id`)
+) ENGINE = InnoDB DEFAULT CHARSET = latin1;
+
+--
 -- Contenu de la table `role`
 --
 INSERT INTO

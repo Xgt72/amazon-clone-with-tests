@@ -9,13 +9,17 @@ class BasketController {
       if (baskets.length === 0) {
         return res.sendStatus(404);
       }
+      if (req.method === "POST") {
+        return res.status(201).send(baskets);
+      }
       return res.status(200).send(baskets);
     } catch (err) {
+      console.error(err.message);
       return res.sendStatus(500);
     }
   };
 
-  static getAllCommandAndBasketsByUserId = async (req, res) => {
+  static getAllCommandsAndBasketsByUserId = async (req, res) => {
     const userId = parseInt(req.params.id, 10);
     try {
       const [commands] = await models.command.findAllWithBasketsByUserId(
@@ -56,12 +60,13 @@ class BasketController {
       });
       return res.status(200).send(allCommandsWithBasketLines);
     } catch (err) {
+      console.error(err.message);
       return res.sendStatus(500);
     }
   };
 
-  static createMultipleBaskets = async (req, res, next) => {
-    let baskets = req.body;
+  static createMultiple = async (req, res, next) => {
+    let { baskets } = req.body;
     const commandId = parseInt(req.params.commandId, 10);
 
     baskets = baskets.map((basket) => {
@@ -73,11 +78,12 @@ class BasketController {
       req.id = data.insertId;
       return next();
     } catch (err) {
+      console.error(err.message);
       return res.sendStatus(500);
     }
   };
 
-  static updateOneBasketById = async (req, res, next) => {
+  static updateOneById = async (req, res, next) => {
     const basket = req.body;
     const commandId = parseInt(req.params.commandId, 10);
     const id = parseInt(req.params.id, 10);

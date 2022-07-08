@@ -4,7 +4,7 @@ const table = "basket";
 
 function findAllByCommandId(orderId) {
   return connection.query(
-    `SELECT b.productId, b.quantity, p.title, p.price, p.image, p.rating FROM ${table} b JOIN products p ON b.productId = p.id WHERE b.orderId=?`,
+    `SELECT b.productId, b.quantity, p.title, p.price, p.image, p.rating FROM ${table} b JOIN product p ON b.productId = p.id WHERE b.commandId=?`,
     [orderId]
   );
 }
@@ -14,7 +14,7 @@ function insertOne(basket) {
 }
 
 function insertMultiple(baskets) {
-  const sql = `INSERT INTO ${table} (orderId, productId, quantity) VALUES ?`;
+  const sql = `INSERT INTO ${table} (commandId, productId, quantity) VALUES ?`;
   const values = [];
   baskets.forEach((basket) => {
     values.push(Object.values(basket));
