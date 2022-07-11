@@ -1,0 +1,5 @@
+services:
+    frontend:
+        container_name: client
+        build: ./frontend
+        command: 'bash -c "npm run test"'
