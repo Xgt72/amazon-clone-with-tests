@@ -1,15 +1,23 @@
 name: integration-test-workflow
 
 on:
-  pull_request:
-    branches: [main, dev]
+    pull_request:
+        branches: [main, dev]
 
 jobs:
-  test-back:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v2
-      - name: Goto client and run tests
-        run: docker compose -f docker-compose.test.yml up --build --exit-code-from backend
+    test-back:
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v2
+            - name: Goto client and run tests
+              run: docker compose -f docker-compose.test.back.yml up --build --exit-code-from backend
+    test-front:
+        runs-on: ubuntu-latest
+        timeout-minutes: 5
+        steps:
+            - name: Check out code
+              uses: actions/checkout@v2
+            - name: Goto client and run tests
+              run: docker compose -f docker-compose.test.front.yml up --build --exit-code-from frontend
